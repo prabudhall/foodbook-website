@@ -24,6 +24,7 @@ export default function Login() {
       // console.log(JSON.stringify({ email: credentials.email, password: credentials.password }));
     }
     else {
+      localStorage.setItem("userEmail", credentials.email);
       localStorage.setItem("authToken", json.authToken);
       console.log(localStorage.getItem("authToken"));
       navigate('/');

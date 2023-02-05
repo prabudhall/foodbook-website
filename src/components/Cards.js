@@ -29,7 +29,7 @@ export default function Cards(props) {
             }
         }
 
-        await dispatch({type:"ADD", id:foodItem._id, name:foodItem.name, price:finalPrice, qty:qty, size:size});
+        await dispatch({type:"ADD", id:foodItem._id, name:foodItem.name, img:foodItem.img, price:finalPrice, qty:qty, size:size});
         console.log(data);
     }
     

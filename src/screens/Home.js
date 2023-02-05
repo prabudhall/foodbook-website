@@ -87,7 +87,7 @@ export default function Home() {
         {
           fdc !== [] ? fdc.map((data) => {
             return (
-              <div className='row mb-3'>
+              <div className='row mb-3' key={data._id}>
                 <div className='fs-3 m-3' key={data._id}>{data.CategoryName}</div>
                 <hr />
                 {
