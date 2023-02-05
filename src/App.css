@@ -36,3 +36,7 @@
     transform: rotate(360deg);
   }
 }
+
+.table-hover tbody tr:hover td {
+  background: aqua;
+}

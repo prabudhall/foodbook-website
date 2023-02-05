@@ -10,6 +10,7 @@ export default function Home() {
   const [fdi, setfdi] = useState([]);
   const [fdc, setfdc] = useState([]);
   const [search, setsearch] = useState("");
+  const [searchbtn, setsearchbtn] = useState("");
 
   const loadData = async () => {
     let response = await fetch("http://localhost:5000/api/foodData", {
@@ -27,6 +28,20 @@ export default function Home() {
   useEffect(() => {
     loadData();
   }, []);
+  
+  const handleSearchBtn = ()=>{
+    setsearchbtn(search);
+  } 
+
+  const handleSearch = (e)=>{
+    setsearch(e.target.value)
+    // console.log(search);
+    if(search.length === 0)
+    {
+      setsearchbtn("");
+    }
+    // console.log(searchbtn);
+  }
 
   return (
     <>
@@ -42,8 +57,8 @@ export default function Home() {
           <div className="carousel-inner" id='carousel'>
             <div className='carousel-caption' style={{ zIndex: '10' }}>
               <div className="d-flex justify-content-center ">
-                <input className="form-control me-2" type="search" placeholder="Search" aria-label="Search" value={search} onChange={(e)=>{setsearch(e.target.value)}} />
-                {/* <button className="btn btn-outline-white text-white bg-success" type="submit">Search</button> */}
+                <input className="form-control me-2" type="search" placeholder="Search" aria-label="Search" value={search} onChange={handleSearch} />
+                <button className="btn btn-outline-white text-white bg-success" type="submit" onClick={handleSearchBtn}>Search</button>
               </div>
             </div>
             <div className="carousel-item active">
@@ -76,11 +91,11 @@ export default function Home() {
                 <div className='fs-3 m-3' key={data._id}>{data.CategoryName}</div>
                 <hr />
                 {
-                  fdi !== [] ? fdi.filter((item) => (item.CategoryName === data.CategoryName) && (item.name.toLowerCase().includes(search.toLocaleLowerCase()))).map((filteredItem) => {
+                  fdi !== [] ? fdi.filter((item) => (item.CategoryName === data.CategoryName) && (item.name.toLowerCase().includes(searchbtn.toLocaleLowerCase()) || search.length === 0)).map((filteredItem) => {
                     return (
                       <div key={filteredItem._id} className='col-12 col-md-6 col-lg-3'>
-                        <Cards foodName={filteredItem.name}
-                          imgSrc={filteredItem.img}
+                        <Cards foodItem={filteredItem}
+                          // imgSrc={filteredItem.img}
                           options={filteredItem.options[0]}
                           description={filteredItem.description}
                         ></Cards>
