@@ -1,5 +1,8 @@
+if(process.env.NODE_ENV !== 'production'){
+    require('dotenv').config();
+}
 const mongoose = require('mongoose');
-const mg = "mongodb+srv://pro:pro@maindb.9ij2cdi.mongodb.net/db?retryWrites=true&w=majority"
+const mg = process.env.DB_URI;
 mongoose.set('strictQuery', false);
 
 const mdb = async()=>{

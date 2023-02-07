@@ -6,7 +6,10 @@ export default function MyOrder() {
     const [orderData, setOrderData] = useState("");
     
     const fetchMyOrder = async ()=>{
-        await fetch("http://localhost:5000/api/myOrderData",{
+        console.log(process.env);
+        var fetchfrom = process.env.REACT_APP_BACK_URL + "/api/myOrderData";
+
+        await fetch(fetchfrom,{
             method: "POST",
             headers: {
                 "Content-type": "application/json"
@@ -28,23 +31,26 @@ export default function MyOrder() {
         <div>
             <div><NavBar /></div>
 
-            <div className='container'>
-                <div className='row'>
-                    {orderData !== {} ? Array(orderData).map(data => {
-                        // console.log("inside OD");
-                        console.log(data);
-                        return (
-                            data.myOrder ?
-                                data.myOrder.order_id.slice(0).reverse().map((item) => {
-                                    // console.log("inside data");
-                                    // console.log(item);
-                                    return (
-                                        item.map((arrayData) => {
-                                            // console.log("inside item data to show");
-                                            // console.log(arrayData);
-                                            return (
-                                                <div  >
-                                                    {arrayData.Order_date ? <div className='m-auto mt-5'>
+            <div >
+                
+                {orderData !== {} ? Array(orderData).map(data => {
+                    // console.log("inside OD");
+                    console.log(data);
+                    return (
+                        <div className='container'>
+                            <div className='row'>
+                                {
+                                    data.myOrder ?
+                                    data.myOrder.order_id.slice(0).reverse().map((item) => {
+                                        // console.log("inside data");
+                                        // console.log(item);
+                                        return (
+                                            item.map((arrayData) => {
+                                                // console.log("inside item data to show");
+                                                // console.log(arrayData);
+                                                // inside return either only js like below or if html is also there then js inside {} as above 
+                                                return (
+                                                    arrayData.Order_date ? <div className='m-auto mt-5'>
                                                         
                                                         {arrayData.Order_date}
                                                         <hr />
@@ -64,16 +70,19 @@ export default function MyOrder() {
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                    }
-                                                </div>
-                                            )
-                                        })
-                                    )
-                                }) : ""
-                        )
-                    }) : ""}
-                </div>
+                                                    
+                                                )
+                                            })
+                                        )
+                                    }) : ""
+                                }
+                            </div>
+                        </div>
+                    )
+                }) : ""}
+                
             </div>
+
             <div><Footer /></div>
         </div>
     )

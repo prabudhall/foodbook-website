@@ -1,14 +1,21 @@
 import React, {useState} from 'react'
-import {Link} from 'react-router-dom'
+import {Link, useNavigate} from 'react-router-dom'
 
 export default function Signup() {
 
     const [credentials, setcredentials] = useState({name:"", email:"", password:"", geolocation:""});
+    let navigate = useNavigate();
+    if(localStorage.getItem("authToken")){
+        navigate("/");
+    }
 
     const handleSubmit = async(e)=>{
         e.preventDefault();
         console.log(JSON.stringify({name:credentials.name, email:credentials.email, password:credentials.password, location:credentials.geolocation})        );
-        const response = await fetch("http://localhost:5000/api/createuser", {
+
+        var fetchfrom = process.env.REACT_APP_BACK_URL + "/api/createuser";
+
+        const response = await fetch(fetchfrom, {
             method: "POST",
             headers:{
                 "Content-type": "application/json"
@@ -20,6 +27,9 @@ export default function Signup() {
 
         if(!json.success) {
             alert("Inavlid Credentials");
+        }
+        else{
+            navigate("/login");
         }
     }
 

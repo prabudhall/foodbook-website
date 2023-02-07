@@ -1,3 +1,6 @@
+if(process.env.NODE_ENV !== 'production'){
+    require('dotenv').config();
+}
 const express = require('express');
 const router = express.Router();
 const User = require('../models/Users');
@@ -5,7 +8,7 @@ const {body, validationResult} = require('express-validator');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
-const jwtSecret = "Any32bitCharacterToBeEnteredHere";
+const jwtSecret = process.env.JWT_SECRET;
 
 router.post("/createuser", 
 body("name", "Small").isLength({min: 3}),

@@ -3,15 +3,18 @@ import { Link, useNavigate } from 'react-router-dom'
 import Badge from 'react-bootstrap/Badge'
 import Model from '../Model';
 import Cart from '../screens/Cart';
-import { useCart } from './ContextReducer';
+import { useCart, useDispatchCart } from './ContextReducer';
 
 export default function NavBar() {
     const [cartView, setCartView] = useState(false);
     var data = useCart();
+    var dispatch = useDispatchCart();
 
     const navigate = useNavigate();
     const handleLogout = () => {
         localStorage.removeItem("authToken");
+        localStorage.removeItem("userEmail");
+        dispatch({type: "DROP"});
         navigate('/');
     }
 

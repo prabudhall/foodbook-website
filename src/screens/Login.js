@@ -5,11 +5,17 @@ export default function Login() {
 
   const [credentials, setcredentials] = useState({ email: "", password: "" });
   var navigate = useNavigate();
+  if(localStorage.getItem("authToken")){
+    navigate("/");
+  }
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     console.log(JSON.stringify({ email: credentials.email, password: credentials.password }));
-    const response = await fetch("http://localhost:5000/api/loginuser", {
+
+    var fetchfrom = process.env.REACT_APP_BACK_URL + "/api/loginuser";
+
+    const response = await fetch(fetchfrom, {
       method: "POST",
       headers: {
         "Content-type": "application/json"

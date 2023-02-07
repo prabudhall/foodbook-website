@@ -15,6 +15,10 @@ export default function Cards(props) {
     const [size, setSize] = useState("");
 
     const handleATC = async ()=>{
+        if(localStorage.getItem('userEmail') == null){
+            alert("You must Login first!");
+            return;
+        }
         let food = []
         for(const item of data){
             if(item.id === foodItem._id){

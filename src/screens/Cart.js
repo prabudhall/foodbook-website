@@ -2,6 +2,7 @@ import React from 'react'
 import { useCart, useDispatchCart } from '../components/ContextReducer'
 import trash from '../trash.svg'
 
+
 export default function Cart() {
 
     var data = useCart();
@@ -19,7 +20,10 @@ export default function Cart() {
     
     const handleCheckOut = async()=>{
         let userEmail = localStorage.getItem('userEmail');
-        let response = await fetch('http://localhost:5000/api/orderData', {
+
+        var fetchfrom = process.env.REACT_APP_BACK_URL + "/api/orderData";
+
+        let response = await fetch(fetchfrom, {
             method: "POST",
             headers: {
             "Content-type": "application/json"

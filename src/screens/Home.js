@@ -13,7 +13,8 @@ export default function Home() {
   const [searchbtn, setsearchbtn] = useState("");
 
   const loadData = async () => {
-    let response = await fetch("http://localhost:5000/api/foodData", {
+    var fetchfrom = process.env.REACT_APP_BACK_URL + "/api/foodData";
+    let response = await fetch(fetchfrom, {
       method: "POST",
       header: {
         "Content-type": "application.json"
