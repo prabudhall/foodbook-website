@@ -3,6 +3,7 @@ import Cards from '../components/Cards'
 // import Carousel from '../components/Carousel'
 import Footer from '../components/Footer'
 import NavBar from '../components/NavBar'
+import Loading from '../components/Loading'
 // import { Link } from 'react-router-dom'
 
 export default function Home() {
@@ -13,17 +14,23 @@ export default function Home() {
   const [searchbtn, setsearchbtn] = useState("");
 
   const loadData = async () => {
-    var fetchfrom = process.env.REACT_APP_BACK_URL + "/api/foodData";
-    let response = await fetch(fetchfrom, {
-      method: "POST",
-      header: {
-        "Content-type": "application.json"
-      },
-    });
-    response = await response.json();
-    // console.log(response[0], response[1]);
-    setfdi(response[0]);
-    setfdc(response[1]);
+    try{
+      var fetchfrom = process.env.REACT_APP_BACK_URL + "/api/foodData";
+      let response = await fetch(fetchfrom, {
+        method: "POST",
+        header: {
+          "Content-type": "application.json"
+        },
+      });
+      response = await response.json();
+      // console.log(response[0], response[1]);
+      setfdi(response[0]);
+      setfdc(response[1]);
+    }
+    catch(error){
+      console.log("Error cannot fetch");
+      console.log(fdc);
+    }
   }
 
   useEffect(() => {
@@ -82,11 +89,11 @@ export default function Home() {
           </button>
         </div>
       </div>
-
+      
 
       <div className='container m-3'>
         {
-          fdc !== [] ? fdc.map((data) => {
+          fdc.length !== 0 ? fdc.map((data) => {
             return (
               <div className='row mb-3' key={data._id}>
                 <div className='fs-3 m-3' key={data._id}>{data.CategoryName}</div>
@@ -106,10 +113,11 @@ export default function Home() {
                 }
               </div>
             )
-          }) : <div>""""""</div>
+          }) : <div className='row mb-3 my-2 gy-2'> <div className='fs-3 m-3'> <Loading /> </div> </div>
         }
         {/* <Cards /> */}
       </div>
+
       <div> <Footer /> </div>
     </>
   )

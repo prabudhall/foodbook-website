@@ -1,8 +1,10 @@
 import React, {useState} from 'react'
 import {Link, useNavigate} from 'react-router-dom'
+import { Backdrop, CircularProgress } from '@mui/material'
 
 export default function Signup() {
 
+    const [bdOpen, setBdOpen] = useState(false);
     const [credentials, setcredentials] = useState({name:"", email:"", password:"", geolocation:""});
     let navigate = useNavigate();
     if(localStorage.getItem("authToken")){
@@ -12,6 +14,7 @@ export default function Signup() {
     const handleSubmit = async(e)=>{
         e.preventDefault();
         console.log(JSON.stringify({name:credentials.name, email:credentials.email, password:credentials.password, location:credentials.geolocation})        );
+        setBdOpen(true);
 
         var fetchfrom = process.env.REACT_APP_BACK_URL + "/api/createuser";
 
@@ -24,6 +27,7 @@ export default function Signup() {
         });
         const json = await response.json();
         console.log(json);
+        setBdOpen(false);
 
         if(!json.success) {
             alert("Inavlid Credentials");
@@ -39,6 +43,9 @@ export default function Signup() {
 
     return (
         <div>
+            <Backdrop open = {bdOpen}>
+                <CircularProgress />
+            </Backdrop>
             <div className='container'>
                 <form onSubmit={handleSubmit}>
                     <div className="mb-3">

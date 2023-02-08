@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import NavBar from '../components/NavBar'
 import Footer from '../components/Footer'
+import Loading from '../components/Loading';
 
 export default function MyOrder() {
     const [orderData, setOrderData] = useState("");
@@ -8,7 +9,7 @@ export default function MyOrder() {
     const fetchMyOrder = async ()=>{
         console.log(process.env);
         var fetchfrom = process.env.REACT_APP_BACK_URL + "/api/myOrderData";
-
+        //til the time it is fetching the page is loading and waiting for this and if it fails then loading become the final state and cannot be reloaded until reloaded manually
         await fetch(fetchfrom,{
             method: "POST",
             headers: {
@@ -32,8 +33,10 @@ export default function MyOrder() {
             <div><NavBar /></div>
 
             <div >
+                {orderData ==="" ? <div> <Loading /> </div>: 
                 
-                {orderData !== {} ? Array(orderData).map(data => {
+                <div>
+                    {orderData !== {} ? Array(orderData).map(data => {
                     // console.log("inside OD");
                     console.log(data);
                     return (
@@ -80,6 +83,9 @@ export default function MyOrder() {
                         </div>
                     )
                 }) : ""}
+                </div>
+
+                }
                 
             </div>
 

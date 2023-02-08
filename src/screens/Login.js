@@ -1,8 +1,10 @@
 import React, { useState } from 'react'
 import {Link, useNavigate} from 'react-router-dom'
+import { Backdrop, CircularProgress } from '@mui/material'
 
 export default function Login() {
 
+  const [bdOpen, setBdOpen] = useState(false);
   const [credentials, setcredentials] = useState({ email: "", password: "" });
   var navigate = useNavigate();
   if(localStorage.getItem("authToken")){
@@ -12,6 +14,7 @@ export default function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     console.log(JSON.stringify({ email: credentials.email, password: credentials.password }));
+    setBdOpen(true);
 
     var fetchfrom = process.env.REACT_APP_BACK_URL + "/api/loginuser";
 
@@ -24,7 +27,7 @@ export default function Login() {
     });
     const json = await response.json();
     console.log(json);
-
+    setBdOpen(false);
     if (!json.success) {
       alert("Inavlid Credentials");
       // console.log(JSON.stringify({ email: credentials.email, password: credentials.password }));
@@ -43,7 +46,9 @@ export default function Login() {
 
   return (
     <div>
-
+      <Backdrop open = {bdOpen}>
+        <CircularProgress />
+      </Backdrop>
       <div className='container'>
         <form onSubmit={handleSubmit}>
 
