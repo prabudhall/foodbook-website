@@ -1,4 +1,5 @@
-import React from 'react'
+import React, { useEffect } from 'react'
+import { useNavigate } from 'react-router-dom';
 import { useCart, useDispatchCart } from '../components/ContextReducer'
 import trash from '../trash.svg'
 
@@ -7,6 +8,33 @@ export default function Cart() {
 
     var data = useCart();
     var dispatch = useDispatchCart();
+    var navigate = useNavigate();
+
+    useEffect(()=>{
+        async function check(){
+            var fetchfrom2 = process.env.REACT_APP_BACK_URL + "/api/verifyJWT";
+            const res = await fetch(fetchfrom2, {
+                method: "POST",
+                headers: {
+                    "Content-type": "application/json"
+                },
+                body: JSON.stringify({authToken: localStorage.getItem("authToken")})
+            });
+
+            const json = await res.json();
+            if(!json.success){
+                localStorage.removeItem("authToken");
+                localStorage.removeItem("userEmail");
+                alert("AuthToken is different, Therefore login again");
+                dispatch({type: "DROP"});
+                navigate('/');
+                return false;
+            }
+        }
+        if(!check()){
+            return;
+        }
+    },[]);
 
     if(data.length === 0){
         return(

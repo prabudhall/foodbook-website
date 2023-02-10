@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {Link, useNavigate} from 'react-router-dom'
 import { Backdrop, CircularProgress } from '@mui/material'
 
@@ -7,9 +7,13 @@ export default function Login() {
   const [bdOpen, setBdOpen] = useState(false);
   const [credentials, setcredentials] = useState({ email: "", password: "" });
   var navigate = useNavigate();
-  if(localStorage.getItem("authToken")){
-    navigate("/");
-  }
+  useEffect(()=>{
+    if(localStorage.getItem("authToken")){
+      alert("Already logged in");
+      navigate("/");
+      return;
+    }
+  },[]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();

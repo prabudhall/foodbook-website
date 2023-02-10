@@ -59,7 +59,8 @@ async(req, res)=>{
             return res.status(400).json({ errors: "Invalid password" });
         }
         const data = {
-            user: founduser._id
+            user: founduser._id,
+            exp: Math.floor(Date.now()/1000) + 60*60*12          // 60 sec * 60 => 1 hr * 12 => 12 hr
         }
         const AT = await jwt.sign(data, jwtSecret);
 

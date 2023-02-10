@@ -2,10 +2,35 @@ import React, { useEffect, useState } from 'react'
 import NavBar from '../components/NavBar'
 import Footer from '../components/Footer'
 import Loading from '../components/Loading';
+import { useNavigate } from 'react-router-dom';
+import { useDispatchCart } from '../components/ContextReducer';
 
 export default function MyOrder() {
     const [orderData, setOrderData] = useState("");
+    var dispatch = useDispatchCart();
+    const navigate = useNavigate();
     
+    const checkJWTsign = async ()=>{
+        var fetchfrom2 = process.env.REACT_APP_BACK_URL + "/api/verifyJWT";
+        const response = await fetch(fetchfrom2, {
+            method: "POST",
+            headers: {
+                "Content-type": "application/json"
+            },
+            body: JSON.stringify({authToken: localStorage.getItem("authToken")})
+        });
+
+        const json = await response.json();
+        if(!json.success){
+            localStorage.removeItem("authToken");
+            localStorage.removeItem("userEmail");
+            alert("AuthToken is different, Therefore login again");
+            dispatch({type: "DROP"});
+            navigate('/login');
+            return;
+        }
+    }
+
     const fetchMyOrder = async ()=>{
         console.log(process.env);
         var fetchfrom = process.env.REACT_APP_BACK_URL + "/api/myOrderData";
@@ -25,7 +50,15 @@ export default function MyOrder() {
     }
 
     useEffect(()=>{
-        fetchMyOrder();
+        if(!localStorage.getItem('authToken')){
+            alert("You must Login first");
+            navigate('/login');   
+            return;
+        }
+        checkJWTsign();
+        if(localStorage.getItem('authToken')){
+            fetchMyOrder();
+        }
     }, []);
 
     return (

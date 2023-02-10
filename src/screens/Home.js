@@ -4,6 +4,7 @@ import Cards from '../components/Cards'
 import Footer from '../components/Footer'
 import NavBar from '../components/NavBar'
 import Loading from '../components/Loading'
+import { useDispatchCart } from '../components/ContextReducer'
 // import { Link } from 'react-router-dom'
 
 export default function Home() {
@@ -12,6 +13,7 @@ export default function Home() {
   const [fdc, setfdc] = useState([]);
   const [search, setsearch] = useState("");
   const [searchbtn, setsearchbtn] = useState("");
+  var dispatch = useDispatchCart();
 
   const loadData = async () => {
     try{
@@ -33,8 +35,32 @@ export default function Home() {
     }
   }
 
+  const checkJWTsign = async ()=>{
+    var fetchfrom2 = process.env.REACT_APP_BACK_URL + "/api/verifyJWT";
+    const response = await fetch(fetchfrom2, {
+        method: "POST",
+        headers: {
+            "Content-type": "application/json"
+        },
+        body: JSON.stringify({authToken: localStorage.getItem("authToken")})
+    });
+
+    const json = await response.json();
+    if(!json.success){
+        localStorage.removeItem("authToken");
+        localStorage.removeItem("userEmail");
+        alert("AuthToken is different, Therefore login again");
+        dispatch({type: "DROP"});
+    }
+  }
+  if(localStorage.getItem('authToken'))
+  {
+    checkJWTsign();
+  }
+
   useEffect(() => {
     loadData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   
   const handleSearchBtn = ()=>{
@@ -93,7 +119,7 @@ export default function Home() {
 
       <div className='container m-3'>
         {
-          fdc.length !== 0 ? fdc.map((data) => {
+          fdc !== null && fdc.length !== 0 ? fdc.map((data) => {
             return (
               <div className='row mb-3' key={data._id}>
                 <div className='fs-3 m-3' key={data._id}>{data.CategoryName}</div>
