@@ -53,15 +53,16 @@ export default function Home() {
         dispatch({type: "DROP"});
     }
   }
-  if(localStorage.getItem('authToken'))
-  {
-    checkJWTsign();
-  }
-
+  
   useEffect(() => {
     loadData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+  
+  if(localStorage.getItem('authToken'))
+  {
+    checkJWTsign();
+  }
   
   const handleSearchBtn = ()=>{
     setsearchbtn(search);
